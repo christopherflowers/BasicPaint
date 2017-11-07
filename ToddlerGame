@@ -1,0 +1,33 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+import javax.swing.JFrame;
+
+/**
+ * This class runs my entire Toddler Game program.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public class ToddlerGame {
+
+	/**
+	 * This class runs my entire Toddler Game program.
+	 * 
+	 * @param args
+	 *            command line parameters
+	 */
+	public static void main(String[] args) {
+		// creates the frame for my game
+		JFrame newWindow = new JFrame("Toddler Game");
+		// this allows my program to close properly
+		newWindow.setDefaultCloseOperation(newWindow.DISPOSE_ON_CLOSE);
+		// this will add in my toddler game panel
+		newWindow.add(new ToddlerPanel(newWindow));
+
+		newWindow.pack();
+		newWindow.setVisible(true);
+
+	}
+
+}
