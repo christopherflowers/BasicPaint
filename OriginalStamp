@@ -1,0 +1,79 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+
+import javax.swing.JComponent;
+
+/**
+ * This class is a original stamp with no specifications.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public class OriginalStamp extends JComponent implements Stamp {
+	/**
+	 * This is the point on the panel.
+	 */
+	protected Point point;
+	/**
+	 * This is the dimension of the stamp.
+	 */
+	protected Dimension dim;
+	/**
+	 * This is the color of the stamp.
+	 */
+	protected Color color;
+
+	/**
+	 * This constructs a new stamp.
+	 * 
+	 * @param p
+	 *            the point
+	 * @param d
+	 *            the dimension
+	 * @param c
+	 *            the color
+	 */
+	public OriginalStamp(Point p, Dimension d, Color c) {
+		point = p;
+		dim = d;
+		color = c;
+	}
+
+	/**
+	 * This gets the point of the stamp.
+	 */
+	@Override
+	public Point getPosition() {
+		return point;
+	}
+
+	/**
+	 * This gets the dimension of the stamp.
+	 */
+	@Override
+	public Dimension getSize() {
+		return dim;
+	}
+
+	/**
+	 * This gets the color of the stamp.
+	 */
+	@Override
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * This draws the stamp.
+	 */
+	@Override
+	public void draw(Graphics g) {
+		super.paintComponent(g);
+
+	}
+}
