@@ -1,0 +1,43 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+import java.awt.*;
+
+/**
+ * This is an interface for a Stamp.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public interface Stamp {
+
+	/**
+	 * This gets the position of the stamp.
+	 * 
+	 * @return the point
+	 */
+	public Point getPosition();
+
+	/**
+	 * This gets the dimension of the stamp.
+	 * 
+	 * @return the dimension
+	 */
+	public Dimension getSize();
+
+	/**
+	 * This gets the color of the stamp.
+	 * 
+	 * @return the color
+	 */
+	public Color getColor();
+
+	/**
+	 * This draws the stamp
+	 * 
+	 * @param g
+	 *            the graphics
+	 */
+	public void draw(Graphics g);
+
+}
