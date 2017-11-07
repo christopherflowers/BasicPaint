@@ -1,0 +1,41 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+/**
+ * This interface stores stamps in a list.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public interface StampList {
+
+	/**
+	 * This method gets how many stamps are on the panel.
+	 * 
+	 * @return the stamp count
+	 */
+	public int getStampCount();
+
+	/**
+	 * This method gets a stamp in the list.
+	 * 
+	 * @param pos
+	 *            the index
+	 * @return the stamp
+	 */
+	public Stamp getStamp(int pos);
+
+	/**
+	 * This method adds a stamp to the list.
+	 * 
+	 * @param s
+	 *            the stamp
+	 */
+	public void addStamp(Stamp s);
+
+	/**
+	 * This method removes all stamps from your list.
+	 */
+	public void removeAllStamps();
+
+}
