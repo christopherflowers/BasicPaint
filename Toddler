@@ -1,0 +1,377 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+/**
+ * This class is the panels where all of the games are located.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public class ToddlerPanel extends JPanel implements StampList {
+
+	/**
+	 * This is the combobox of colors.
+	 */
+	private JComboBox<String> colors;
+	/**
+	 * This is the stamp color.
+	 */
+	private Color stampColor;
+	/**
+	 * This is the shape of the stamp.
+	 */
+	private String stampShape;
+	/**
+	 * This is the location of the mouse on the panel.
+	 */
+	private Point mousePoint;
+	/**
+	 * This is the list of stamps that are drawn on the panel.
+	 */
+	private List<Stamp> stamps;
+	/**
+	 * This is the x coordinate of the mouse.
+	 */
+	private int mouseX;
+	/**
+	 * This is the y coordinate of the mouse.
+	 */
+	private int mouseY;
+	/**
+	 * This is the number of stamps currently on the panel.
+	 */
+	private int stampCount = 0;
+
+	/**
+	 * This is the options for colors in the ComboBox.
+	 */
+	private static final String[] STAMP_COLORS = { "Blue", "Red", "Yellow" };
+
+	/**
+	 * This is the Circle radio button.
+	 */
+	private JRadioButton circleRadio;
+	/**
+	 * This is the Square radio button.
+	 */
+	private JRadioButton squareRadio;
+	/**
+	 * This is the Rectangle radio button.
+	 */
+	private JRadioButton rectRadio;
+	/**
+	 * This is the ToddlerGame JFrame.
+	 */
+	private static JFrame theGame;
+
+	/**
+	 * This is the constructor for the ToddlerPanel.
+	 * 
+	 * @param j
+	 *            the ToddlerGame JFrame
+	 */
+	public ToddlerPanel(JFrame j) {
+
+		BorderLayout bord = new BorderLayout();
+		setLayout(bord);
+		this.stamps = new ArrayList<Stamp>();
+		theGame = j;
+		setPreferredSize(new Dimension(800, 600));
+		add(createStampStyle(), BorderLayout.EAST);
+
+		this.addMouseListener(new GameListener());
+
+	}
+
+	/**
+	 * This method creates a panel with the selection tools to create a shape.
+	 * 
+	 * @return a panel with all of the selection tools
+	 */
+	private JPanel createStampStyle() {
+		JPanel panel = new JPanel();
+		GridLayout grid = new GridLayout(12, 1);
+		panel.setLayout(grid);
+		// create radio buttons
+
+		JButton clearButton = new JButton("Clear");
+		JButton quitButton = new JButton("Quit");
+		circleRadio = new JRadioButton("Circle", true);
+		squareRadio = new JRadioButton("Square");
+		rectRadio = new JRadioButton("Rectangle");
+		colors = new JComboBox<String>(STAMP_COLORS);
+		// these two lines correlate.
+		colors.setSelectedIndex(2);
+		stampColor = Color.yellow;
+		stampShape = "Circle";
+		colors.setMaximumSize(colors.getPreferredSize());
+		colors.setAlignmentY(RIGHT_ALIGNMENT);
+
+		ActionListener colorActionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				int selectedIndex = colors.getSelectedIndex();
+				System.out.println(selectedIndex);
+
+				switch (selectedIndex) {
+				case 0:
+					stampColor = Color.blue;
+					break;
+				case 1:
+					stampColor = Color.red;
+					break;
+				case 2:
+					stampColor = Color.yellow;
+					break;
+				default:
+					System.out.println("bad things");
+					break;
+				}
+			}
+		};
+		colors.addActionListener(colorActionListener);
+
+		ActionListener shapeActionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JRadioButton button = (JRadioButton) e.getSource();
+
+				if (button == circleRadio) {
+					stampShape = "Circle";
+
+				} else if (button == squareRadio) {
+					System.out.println(mousePoint);
+					stampShape = "Square";
+
+				} else if (button == rectRadio) {
+					stampShape = "Rectangle";
+				}
+
+			}
+		};
+
+		circleRadio.addActionListener(shapeActionListener);
+		squareRadio.addActionListener(shapeActionListener);
+		rectRadio.addActionListener(shapeActionListener);
+
+		// add to panel
+		panel.add(circleRadio);
+		panel.add(squareRadio);
+		panel.add(rectRadio);
+		panel.add(colors);
+		panel.add(clearButton);
+		clearButton.addActionListener(new Clear());
+		panel.add(quitButton);
+		quitButton.addActionListener(new Quit());
+
+		ButtonGroup group = new ButtonGroup();
+		// group the JRadioButtons together
+		group.add(circleRadio);
+		group.add(squareRadio);
+		group.add(rectRadio);
+		group.add(clearButton);
+		group.add(quitButton);
+		panel.setAlignmentY(RIGHT_ALIGNMENT);
+
+		return panel;
+	}
+
+	/**
+	 * This class is used to handle my clear button actions.
+	 */
+	private class Clear implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			removeAllStamps();
+			// repaint();
+		}
+	}
+
+	/**
+	 * This class is used to handle my quit button actions.
+	 * 
+	 * @author flowersC
+	 * @version 2016-12-13
+	 *
+	 */
+	private static class Quit implements ActionListener {
+
+		/**
+		 * This method overrides its parents actionPerformed.
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			theGame.dispose();
+		}
+	}
+
+	/**
+	 * This is the mouse listener that handles where to draw objects.
+	 * 
+	 * @author flowersC
+	 * @version 2016-12-13
+	 *
+	 */
+	private class GameListener implements MouseListener {
+
+		/**
+		 * This method is not used.
+		 */
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// not used
+		}
+
+		/**
+		 * This method is not used.
+		 */
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// not used
+		}
+
+		/**
+		 * This method is not used.
+		 */
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// not used
+		}
+
+		/**
+		 * This method is not used.
+		 */
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// not used
+		}
+
+		/**
+		 * This method creates a stamp at the location of the mouse.
+		 */
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			System.out.println(mousePoint);
+			mouseX = e.getX();
+			mouseY = e.getY();
+
+			if (stampShape.equals("Circle")) {
+				mouseX -= 15;
+				mouseY -= 15;
+				mousePoint = new Point(mouseX, mouseY);
+			} else {
+				if (stampShape.equals("Square")) {
+					mouseX -= 10;
+					mouseY -= 10;
+					mousePoint = new Point(mouseX, mouseY);
+				} else {
+					mouseX -= 15;
+					mouseY -= 30;
+					mousePoint = new Point(mouseX, mouseY);
+				}
+			}
+
+			switch (stampShape) {
+			case ("Square"):
+				Stamp stamp = new SquareStamp(mousePoint, stampColor);
+				addStamp(stamp);
+				break;
+			case ("Rectangle"):
+				Stamp stamp2 = new RectangleStamp(mousePoint, stampColor);
+				addStamp(stamp2);
+				break;
+			case ("Circle"):
+				Stamp stamp3 = new CircleStamp(mousePoint, stampColor);
+				addStamp(stamp3);
+				break;
+			default:
+				System.out.println("Bad things occured");
+				break;
+			}
+
+			repaint();
+
+		}
+
+	}
+
+	/**
+	 * This method draws the stamps to the panel.
+	 * 
+	 * @param g
+	 *            the graphics
+	 */
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		for (int i = 0; i < stampCount; i++) {
+			stamps.get(i).draw(g);
+		}
+
+	}
+
+	/**
+	 * This method gets the number of stamps on the panel.
+	 */
+	@Override
+	public int getStampCount() {
+		return stampCount;
+	}
+
+	/**
+	 * This method gets a stamp at a specified location.
+	 */
+	@Override
+	public Stamp getStamp(int pos) {
+		if (pos < stamps.size() && pos >= 0) {
+			return stamps.get(pos);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * This method adds a stamp to the list of stamps.
+	 */
+	@Override
+	public void addStamp(Stamp s) {
+		stamps.add(s);
+
+		stampCount++;
+	}
+
+	/**
+	 * This method removes all stamps from the list.
+	 */
+	@Override
+	public void removeAllStamps() {
+		stamps.clear();
+		stampCount = 0;
+		repaint();
+
+	}
+
+}
