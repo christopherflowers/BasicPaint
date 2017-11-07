@@ -1,0 +1,47 @@
+package uwstout.cs144.projects.project3.toddlerGame;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+
+/**
+ * This class creates a Square Stamp.
+ * 
+ * @author flowersC
+ * @version 2016-12-13
+ *
+ */
+public class SquareStamp extends OriginalStamp {
+	/**
+	 * The dimension of every square.
+	 */
+	private static Dimension d = new Dimension(20, 20);
+
+	/**
+	 * This is the constructor for a square stamp.
+	 * 
+	 * @param p
+	 *            the point
+	 * @param c
+	 *            the color
+	 */
+	public SquareStamp(Point p, Color c) {
+		super(p, d, c);
+	}
+
+	/**
+	 * This draws a square to the panel.
+	 * 
+	 * @param g
+	 *            the graphics
+	 */
+	public void draw(Graphics g) {
+
+		System.out.println("worked" + getColor() + getPosition() + getSize());
+		g.setColor(getColor());
+		int x = (int) point.getX();
+		int y = (int) point.getY();
+		g.fillRect(x, y, 20, 20);
+	}
+}
